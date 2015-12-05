@@ -19,6 +19,10 @@ Or you may use [git subtrees][]:
 
 [git subtrees]: https://spwhitton.name/blog/entry/emacs-pkg-subtree/
 
+haskell-tab-indent is also available from [MELPA][] (and MELPA Stable).
+
+[MELPA]: http://melpa.org/
+
 # Usage
 
 If you set `indent-tabs-mode` in the `.dir-locals.el` file for a
