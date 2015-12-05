@@ -5,6 +5,7 @@
 ;; Author: Sean Whitton <spwhitton@spwhitton.name>
 ;; URL: https://spwhitton.name/tech/code/haskell-tab-indent/
 ;; Version: 0.1.0
+;; Package-Version: 0.1.0
 ;; Keywords: indentation, haskell
 
 ;; This file is NOT part of GNU Emacs.
