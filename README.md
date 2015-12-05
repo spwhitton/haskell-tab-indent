@@ -15,7 +15,7 @@ and simply
 
 Or you may use [git subtrees][]:
 
-    emacs-pkg-subtree pull https://git.spwhitton.name/haskell-tab-indent 0.1.0
+    emacs-pkg-subtree add https://git.spwhitton.name/haskell-tab-indent 0.1.0
 
 [git subtrees]: https://spwhitton.name/blog/entry/emacs-pkg-subtree/
 
