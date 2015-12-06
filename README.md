@@ -1,3 +1,5 @@
+[![MELPA](https://melpa.org/packages/haskell-tab-indent-badge.svg)](https://melpa.org/#/haskell-tab-indent) [![MELPA Stable](https://stable.melpa.org/packages/haskell-tab-indent-badge.svg)](https://stable.melpa.org/#/haskell-tab-indent)
+
 This file provides `haskell-tab-indent-mode`, a simple Emacs
 indentation minor mode for Haskell projects which require tabs for
 indentation and do not permit spaces (except for where clauses, as a
