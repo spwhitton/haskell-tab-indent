@@ -11,6 +11,6 @@
 - Switch debian/changelog->NEWS.md.
 
 0.1.0 (2015-12-05)
-----------------
+------------------
 
 - Initial release.
