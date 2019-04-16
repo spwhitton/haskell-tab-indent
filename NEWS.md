@@ -1,4 +1,4 @@
-0.2 (unreleased)
+0.2 (2019-04-15)
 ----------------
 
 - Deactivate haskell-indentation-mode when activating
