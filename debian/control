@@ -1,0 +1,16 @@
+Source: haskell-tab-indent
+Section: lisp
+Priority: optional
+Maintainer: Sean Whitton <spwhitton@spwhitton.name>
+Build-Depends: debhelper (>= 10),
+ dh-elpa
+Standards-Version: 4.1.5
+Homepage: https://spwhitton.name/tech/code/haskell-tab-indent/
+
+Package: elpa-haskell-tab-indent
+Architecture: all
+Depends: ${elpa:Depends}, ${misc:Depends}
+Recommends: emacs (>= 46.0)
+Enhances: emacs,
+ emacs25
+Description: tab-based indentation for haskell-mode

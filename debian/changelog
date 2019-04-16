@@ -1,0 +1,5 @@
+haskell-tab-indent (0.2-1~athena1) unstable; urgency=medium
+
+  * packaging for athena's apt repo
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 15 Apr 2019 18:31:00 -0700
