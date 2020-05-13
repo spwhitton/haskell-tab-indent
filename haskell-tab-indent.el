@@ -53,71 +53,67 @@
 (require 'cl-lib)
 (require 'seq)
 
-(cl-flet
-    ((count-line-tabs () (save-excursion
-                           (back-to-indentation)
-                           (length (seq-filter (lambda (c) (equal c ?\t))
-                                               (buffer-substring
-                                                (line-beginning-position)
-                                                (point))))))
-     (tabs (n) (make-string n ?\t)))
+(cl-flet ((count-line-tabs () (save-excursion
+                                (back-to-indentation)
+                                (length (seq-filter (lambda (c) (equal c ?\t))
+                                                    (buffer-substring
+                                                     (line-beginning-position)
+                                                     (point))))))
+          (tabs (n) (make-string n ?\t)))
   (defun haskell-tab-indent ()
     "Auto indentation on TAB for `haskell-tab-indent-mode'."
     (interactive)
     (let ((this-line-tabs (count-line-tabs))
-          (prev-line-tabs
-           (save-excursion
-             (cl-loop do    (beginning-of-line 0)
-                      while (looking-at "[[:space:]]*$"))
-             (count-line-tabs)))
+          (prev-line-tabs (save-excursion
+                            (cl-loop do    (beginning-of-line 0)
+                                     while (looking-at "[[:space:]]*$"))
+                            (count-line-tabs)))
           ;; determine whether previous line is a declaration
-          (prev-line-decl
-           (save-excursion
-             (beginning-of-line 0)
-             (looking-at "^[[:blank:]]*[[:graph:]]+ :: ")))
-          (prev-line-where
-           (save-excursion
-             (beginning-of-line 0)
-             (looking-at "^[[:blank:]]*where$"))))
+          (prev-line-decl (save-excursion
+                            (beginning-of-line 0)
+                            (looking-at "^[[:blank:]]*[[:graph:]]+ :: ")))
+          ;; determine whether previous line is the first line of a where clause
+          (prev-line-where (save-excursion
+                             (beginning-of-line 0)
+                             (looking-at "^[[:blank:]]*where$"))))
       (save-excursion
         (back-to-indentation)
-        (let ((indent (cond
-                       ((looking-at "where$")
-                        ;; if user explicitly requested an indent
-                        ;; change, cycle indentation of the where
-                        ;; clause, but no deeper than the level of the
-                        ;; previous line.  Otherwise, just ensure it's
-                        ;; preceded by two spaces
-                        (if (eq this-command 'indent-for-tab-command)
-                            (if (>= this-line-tabs prev-line-tabs)
-                                "  "
-                              (concat (tabs (1+ this-line-tabs)) "  "))
-                          (concat (tabs this-line-tabs) "  ")))
-                       ;; if the previous line is a declaration, then
-                       ;; this line should be either empty, or at the
-                       ;; same indent level as that declaration
-                       (prev-line-decl
-                        (tabs prev-line-tabs))
-                       ;; if the previous line was the beginning of a
-                       ;; where clause, indent should be exactly one
-                       ;; more
-                       (prev-line-where
-                        ;; also ensure indentation of the 'where' is correct
-                        (save-excursion
-                          (beginning-of-line 0)
-                          (skip-chars-forward "\t")
-                          (unless (looking-at "  where$")
-                            (insert "  ")))
-                        (tabs (1+ prev-line-tabs)))
-                       ;; if the user explicitly requested an indent
-                       ;; change, cycle through the plausible indents
-                       ((eq this-command 'indent-for-tab-command)
-                        (if (>= this-line-tabs (1+ prev-line-tabs))
-                            ""
-                          (tabs (1+ this-line-tabs))))
-                       ;; otherwise, indent to same level as previous line
-                       (t
-                        (tabs prev-line-tabs)))))
+        (let ((indent (cond ((looking-at "where$")
+                             ;; if user explicitly requested an indent
+                             ;; change, cycle indentation of the where
+                             ;; clause, but no deeper than the level of the
+                             ;; previous line.  Otherwise, just ensure it's
+                             ;; preceded by two spaces
+                             (if (eq this-command 'indent-for-tab-command)
+                                 (if (>= this-line-tabs prev-line-tabs)
+                                     "  "
+                                   (concat (tabs (1+ this-line-tabs)) "  "))
+                               (concat (tabs this-line-tabs) "  ")))
+                            ;; if the previous line is a declaration, then
+                            ;; this line should be either empty, or at the
+                            ;; same indent level as that declaration
+                            (prev-line-decl
+                             (tabs prev-line-tabs))
+                            ;; if the previous line was the beginning of a
+                            ;; where clause, indent should be exactly one
+                            ;; more
+                            (prev-line-where
+                             ;; also check indentation of the 'where' itself
+                             (save-excursion
+                               (beginning-of-line 0)
+                               (skip-chars-forward "\t")
+                               (unless (looking-at "  where$")
+                                 (insert "  ")))
+                             (tabs (1+ prev-line-tabs)))
+                            ;; if the user explicitly requested an indent
+                            ;; change, cycle through the plausible indents
+                            ((eq this-command 'indent-for-tab-command)
+                             (if (>= this-line-tabs (1+ prev-line-tabs))
+                                 ""
+                               (tabs (1+ this-line-tabs))))
+                            ;; otherwise, indent to same level as previous line
+                            (t
+                             (tabs prev-line-tabs)))))
           (setf (buffer-substring (line-beginning-position) (point)) indent))))
     ;; on a line with only indentation, ensure point is at the end
     (when (save-excursion (beginning-of-line) (looking-at "[[:space:]]*$"))
