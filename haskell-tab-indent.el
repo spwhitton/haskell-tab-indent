@@ -1,11 +1,11 @@
 ;;; haskell-tab-indent.el --- tab-based indentation for haskell-mode
 
-;; Copyright (C) 2015, 2017  Sean Whitton
+;; Copyright (C) 2015, 2017, 2020  Sean Whitton
 
 ;; Author: Sean Whitton <spwhitton@spwhitton.name>
 ;; URL: https://spwhitton.name/tech/code/haskell-tab-indent/
-;; Version: 0.2
-;; Package-Version: 0.2
+;; Version: 0.3
+;; Package-Version: 0.3
 ;; Keywords: indentation, haskell
 
 ;; This file is NOT part of GNU Emacs.
@@ -56,8 +56,8 @@
   (save-excursion
     (back-to-indentation)
     ;; check for special case of where clause
-    (if (looking-at "where")
-	(haskell-tab-indent--where)
+    (if (looking-at "where$")
+        (haskell-tab-indent--where)
       ;; check for special case of being called by
       ;; `newline-and-indent': if the user has `electric-indent-mode'
       ;; on and RET bound to `newline-and-indent', we'll end up

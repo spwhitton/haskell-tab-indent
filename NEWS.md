@@ -1,3 +1,10 @@
+0.3 (unreleased)
+----------------
+
+- When checking whether we're on the first line of where clause,
+  require 'where' followed by end of line, rather than just a line
+  starting with 'where'.
+
 0.2 (2019-04-15)
 ----------------
 
