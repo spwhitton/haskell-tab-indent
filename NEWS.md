@@ -5,6 +5,8 @@
   require 'where' followed by end of line, rather than just a line
   starting with 'where'.
 
+- Drop reference to an old git subtrees script from README.md.
+
 0.2 (2019-04-15)
 ----------------
 

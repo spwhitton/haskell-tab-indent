@@ -15,12 +15,6 @@ and simply
 
     (autoload 'haskell-tab-indent-mode "haskell-tab-indent.el")
 
-Or you may use [git subtrees][]:
-
-    emacs-pkg-subtree add https://git.spwhitton.name/haskell-tab-indent 0.1.0
-
-[git subtrees]: https://spwhitton.name/blog/entry/emacs-pkg-subtree/
-
 haskell-tab-indent is also available from [MELPA][] (and MELPA Stable).
 
 [MELPA]: http://melpa.org/
