@@ -59,13 +59,7 @@
                            (length (seq-filter (lambda (c) (equal c ?\t))
                                                (buffer-substring
                                                 (line-beginning-position)
-                                                (point))))))
-     (line-first-word () (save-excursion
-                           (back-to-indentation)
-                           (let ((beg (point)))
-                             (while (not (looking-at "[[:space:]]"))
-                               (forward-char))
-                             (buffer-substring-no-properties beg (point))))))
+                                                (point)))))))
   (defun haskell-tab-indent ()
     "Auto indentation on TAB for `haskell-tab-indent-mode'."
     (interactive)
@@ -75,10 +69,6 @@
              (cl-loop do    (beginning-of-line 0)
                       while (looking-at "[[:space:]]*$"))
              (count-line-tabs)))
-          (this-first-word (line-first-word))
-          (prev-first-word (save-excursion
-                             (beginning-of-line 0)
-                             (line-first-word)))
           ;; determine whether previous line is a declaration
           (prev-line-decl
            (save-excursion
@@ -88,9 +78,10 @@
         (back-to-indentation)
         (if (looking-at "where$")
             (setf (buffer-substring (line-beginning-position) (point)) "  ")
-          ;; attempt to line up declarations and definitions
-          (if (and prev-line-decl
-                   (string= this-first-word prev-first-word))
+          ;; if the previous line is a declaration, then this line
+          ;; should be either empty, or at the same indent level as
+          ;; that declaration
+          (if prev-line-decl
               (setf (buffer-substring (line-beginning-position) (point))
                     (make-string prev-line-tabs ?\t))
             ;; check for special case of being called by
