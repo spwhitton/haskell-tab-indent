@@ -53,7 +53,7 @@
 (require 'cl-lib)
 (require 'seq)
 
-(cl-flet*
+(cl-flet
     ((count-line-tabs () (save-excursion
                            (back-to-indentation)
                            (length (seq-filter (lambda (c) (equal c ?\t))
