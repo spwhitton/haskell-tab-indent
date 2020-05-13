@@ -93,11 +93,8 @@
                    ;; if the previous line was the beginning of a where
                    ;; clause, indent should be exactly one more
                    (prev-line-where
-                    ;; also ensure indentation of the 'where' is
-                    ;; correct
-                    (save-excursion
-                      (forward-line -1)
-                      (haskell-tab-indent))
+                    ;; also ensure indentation of the 'where' is correct
+                    (save-excursion (forward-line -1) (haskell-tab-indent))
                     (1+ prev-line-tabs))
                    ;; if the user explicitly requested an indent
                    ;; change, cycle through the plausible indents
