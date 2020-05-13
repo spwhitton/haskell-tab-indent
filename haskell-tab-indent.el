@@ -74,7 +74,7 @@
           (prev-line-decl
            (save-excursion
              (beginning-of-line 0)
-             (looking-at "^[[:blank:]]*[^[:graph:]]+ :: ")))
+             (looking-at "^[[:blank:]]*[[:graph:]]+ :: ")))
           (prev-line-where
            (save-excursion
              (beginning-of-line 0)
