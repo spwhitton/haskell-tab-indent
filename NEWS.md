@@ -1,15 +1,27 @@
 0.3 (unreleased)
 ----------------
 
-- When checking whether we're on the first line of a where clause,
-  require 'where' followed by end of line, rather than just a line
-  starting with 'where'.
+- When checking for the first line of a where clause, require 'where'
+  followed by end of line, rather than just a line starting with
+  'where'.
 
-- Recognise all declarations, not just top level declarations, in code
-  handling the case where the last command was `newline-and-indent'.
+- Recognise all declarations, not just top level declarations.  On
+  lines following a declaration, always indent to the same level as
+  the previous line, rather than indenting one further.
 
-- Attempt to line up the first line of definitions with declarations
-  on the previous line, rather than indenting further.
+  Lines following declarations should either be indented to the same
+  level as the declaration, or be blank.
+
+- Always indent the first line of the contents of a where clause to
+  one plus the level of the line containing 'where'.
+
+- When one of the above cases does not apply, default to indenting to
+  the same level of the previous line, unless the user explicitly
+  invoked `indent-for-tab-command' (e.g. by hitting the tab key), in
+  which case cycle between possible indents.
+
+  This replaces treating the case where the current command is
+  `newline-and-indent' specially.
 
 - Reset indentation when current indentation is at least one more than
   the previous line, rather than just when it is exactly one more than
