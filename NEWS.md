@@ -5,6 +5,12 @@
   require 'where' followed by end of line, rather than just a line
   starting with 'where'.
 
+- Recognise all declarations, not just top level declarations, in code
+  handling the case where the last command was `newline-and-indent'.
+
+- Attempt to line up the first line of definitions with declarations
+  on the previous line, rather than indenting further.
+
 - Drop reference to an old git subtrees script from README.md.
 
 - Code cleanup.

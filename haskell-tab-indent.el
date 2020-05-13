@@ -59,7 +59,13 @@
                            (length (seq-filter (lambda (c) (equal c ?\t))
                                                (buffer-substring
                                                 (line-beginning-position)
-                                                (point)))))))
+                                                (point))))))
+     (line-first-word () (save-excursion
+                           (back-to-indentation)
+                           (let ((beg (point)))
+                             (while (not (looking-at "[[:space:]]"))
+                               (forward-char))
+                             (buffer-substring-no-properties beg (point))))))
   (defun haskell-tab-indent ()
     "Auto indentation on TAB for `haskell-tab-indent-mode'."
     (interactive)
@@ -69,34 +75,41 @@
              (cl-loop do    (beginning-of-line 0)
                       while (looking-at "[[:space:]]*$"))
              (count-line-tabs)))
-          ;; determine whether previous line is a top-level declaration
-          (prev-line-topdecl
+          (this-first-word (line-first-word))
+          (prev-first-word (save-excursion
+                             (beginning-of-line 0)
+                             (line-first-word)))
+          ;; determine whether previous line is a declaration
+          (prev-line-decl
            (save-excursion
              (beginning-of-line 0)
-             (eq 'haskell-definition-face
-                 (get-text-property (point) 'face)))))
+             (looking-at "[[:space:]]*[^[:space:]]+ ::"))))
       (save-excursion
         (back-to-indentation)
         (if (looking-at "where$")
             (setf (buffer-substring (line-beginning-position) (point)) "  ")
-          ;; check for special case of being called by
-          ;; `newline-and-indent': if the user has `electric-indent-mode'
-          ;; on and RET bound to `newline-and-indent', we'll end up
-          ;; indenting too far, or not enough if the previous line was a
-          ;; top level declaration
-          (unless (or
-                   ;; avoid indenting too far
-                   (and (equal this-command 'newline-and-indent)
-                        (= this-line-tabs prev-line-tabs)
-                        (not prev-line-topdecl))
-                   ;; avoid indenting too little
-                   (and prev-line-topdecl
-                        (= 1 this-line-tabs)))
-            (if (= (1+ prev-line-tabs) this-line-tabs)
-                ;; reset
-                (delete-region (line-beginning-position) (point))
-              ;; indent
-              (insert "\t"))))))
+          ;; attempt to line up declarations and definitions
+          (if (and prev-line-decl
+                   (string= this-first-word prev-first-word))
+              (setf (buffer-substring (line-beginning-position) (point))
+                    (make-string prev-line-tabs ?\t))
+            ;; check for special case of being called by
+            ;; `newline-and-indent': if the user has `electric-indent-mode'
+            ;; on and RET bound to `newline-and-indent', we'll end up
+            ;; indenting too far, or not enough if the previous line was a
+            ;; declaration
+            (unless (or
+                     ;; avoid indenting too far
+                     (and (equal this-command 'newline-and-indent)
+                          (= this-line-tabs prev-line-tabs)
+                          (not prev-line-decl))
+                     ;; avoid indenting too little
+                     (and prev-line-decl (= 1 this-line-tabs)))
+              (if (= (1+ prev-line-tabs) this-line-tabs)
+                  ;; reset
+                  (delete-region (line-beginning-position) (point))
+                ;; indent
+                (insert "\t")))))))
     ;; on a line with only indentation, ensure point is at the end
     (when (save-excursion (beginning-of-line) (looking-at "[[:space:]]*$"))
       (end-of-line))))
