@@ -15,8 +15,8 @@
 - Always indent the first line of the contents of a where clause to
   one plus the level of the line containing 'where'.
 
-  When doing so, try to fix the indentation of the line containing
-  'where' if it's not correct.
+  When doing so, ensure that the 'where' on the previous line is
+  preceded by two spaces.
 
 - When one of the above cases does not apply, default to indenting to
   the same level of the previous line, unless the user explicitly

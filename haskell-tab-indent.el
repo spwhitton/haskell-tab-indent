@@ -94,7 +94,11 @@
                        ;; more
                        (prev-line-where
                         ;; also ensure indentation of the 'where' is correct
-                        (save-excursion (forward-line -1) (haskell-tab-indent))
+                        (save-excursion
+                          (beginning-of-line 0)
+                          (skip-chars-forward "\t")
+                          (unless (looking-at "  where$")
+                            (insert "  ")))
                         (tabs (1+ prev-line-tabs)))
                        ;; if the user explicitly requested an indent
                        ;; change, cycle through the plausible indents
