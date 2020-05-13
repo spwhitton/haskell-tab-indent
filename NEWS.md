@@ -1,7 +1,7 @@
 0.3 (unreleased)
 ----------------
 
-- When checking whether we're on the first line of where clause,
+- When checking whether we're on the first line of a where clause,
   require 'where' followed by end of line, rather than just a line
   starting with 'where'.
 
