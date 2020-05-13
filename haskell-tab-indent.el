@@ -81,29 +81,30 @@
              (looking-at "^[[:blank:]]*where$"))))
       (save-excursion
         (back-to-indentation)
-        (let ((indent
-               (if (looking-at "where$")
-                   (concat (tabs prev-line-tabs) "  ")
-                 (tabs
-                  (cond
-                   ;; if the previous line is a declaration, then this
-                   ;; line should be either empty, or at the same indent
-                   ;; level as that declaration
-                   (prev-line-decl prev-line-tabs)
-                   ;; if the previous line was the beginning of a where
-                   ;; clause, indent should be exactly one more
-                   (prev-line-where
-                    ;; also ensure indentation of the 'where' is correct
-                    (save-excursion (forward-line -1) (haskell-tab-indent))
-                    (1+ prev-line-tabs))
-                   ;; if the user explicitly requested an indent
-                   ;; change, cycle through the plausible indents
-                   ((eq this-command 'indent-for-tab-command)
-                    (if (>= this-line-tabs (1+ prev-line-tabs))
-                        0
-                      (1+ this-line-tabs)))
-                   ;; otherwise, indent to same level as previous line
-                   (t prev-line-tabs))))))
+        (let ((indent (cond
+                       ((looking-at "where$")
+                        (concat (tabs prev-line-tabs) "  "))
+                       ;; if the previous line is a declaration, then
+                       ;; this line should be either empty, or at the
+                       ;; same indent level as that declaration
+                       (prev-line-decl
+                        (tabs prev-line-tabs))
+                       ;; if the previous line was the beginning of a
+                       ;; where clause, indent should be exactly one
+                       ;; more
+                       (prev-line-where
+                        ;; also ensure indentation of the 'where' is correct
+                        (save-excursion (forward-line -1) (haskell-tab-indent))
+                        (tabs (1+ prev-line-tabs)))
+                       ;; if the user explicitly requested an indent
+                       ;; change, cycle through the plausible indents
+                       ((eq this-command 'indent-for-tab-command)
+                        (if (>= this-line-tabs (1+ prev-line-tabs))
+                            ""
+                          (tabs (1+ this-line-tabs))))
+                       ;; otherwise, indent to same level as previous line
+                       (t
+                        (tabs prev-line-tabs)))))
           (setf (buffer-substring (line-beginning-position) (point)) indent))))
     ;; on a line with only indentation, ensure point is at the end
     (when (save-excursion (beginning-of-line) (looking-at "[[:space:]]*$"))
