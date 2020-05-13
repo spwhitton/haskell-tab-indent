@@ -15,6 +15,9 @@
 - Always indent the first line of the contents of a where clause to
   one plus the level of the line containing 'where'.
 
+  When doing so, fix the indentation of the line containing 'where' if
+  it's not correct.
+
 - When one of the above cases does not apply, default to indenting to
   the same level of the previous line, unless the user explicitly
   invoked `indent-for-tab-command' (e.g. by hitting the tab key), in
