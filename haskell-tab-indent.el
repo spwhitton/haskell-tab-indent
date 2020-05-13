@@ -1,4 +1,4 @@
-;;; haskell-tab-indent.el --- tab-based indentation for haskell-mode
+;;; haskell-tab-indent.el --- tab-based indentation for haskell-mode -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015, 2017, 2020  Sean Whitton
 
@@ -50,80 +50,56 @@
 
 ;;; Code:
 
-(defun haskell-tab-indent ()
-  "Auto indentation on TAB for `haskell-tab-indent-mode'."
-  (interactive)
-  (save-excursion
-    (back-to-indentation)
-    ;; check for special case of where clause
-    (if (looking-at "where$")
-        (haskell-tab-indent--where)
-      ;; check for special case of being called by
-      ;; `newline-and-indent': if the user has `electric-indent-mode'
-      ;; on and RET bound to `newline-and-indent', we'll end up
-      ;; indenting too far, or not enough if the previous line was a
-      ;; top level declaration
-      (unless (let ((previous-line-tabs (haskell-tab-indent--previous-line-tabs))
-                    (this-line-tabs (haskell-tab-indent--this-line-tabs)))
-                (or
-                 ;; avoid indenting too far
-                 (and (equal this-command 'newline-and-indent)
-                      (= this-line-tabs previous-line-tabs)
-                      (not (haskell-tab-indent--previous-line-topdecl-p)))
-                 ;; avoid indenting too little
-                 (and (haskell-tab-indent--previous-line-topdecl-p)
-                      (= 1 this-line-tabs))))
-        (haskell-tab-indent--cycle))))
-  ;; On a line with only indentation, ensure point is at the end of
-  ;; it.
-  (when (save-excursion (beginning-of-line) (looking-at "[[:space:]]*$"))
-    (end-of-line)))
+(require 'cl-lib)
+(require 'seq)
 
-(defun haskell-tab-indent--previous-line-topdecl-p ()
-  "Determine whether previous line is a top-level declaration."
-  (save-excursion
-    (beginning-of-line 0)               ; go up one line
-    (equal 'haskell-definition-face (car (cdr (text-properties-at (point)))))))
-
-(defun haskell-tab-indent--where ()
-  ;; `haskell-tab-indent' leaves us just after the indentation
-  (delete-region (line-beginning-position) (point))
-  (insert "  "))
-
-(defun haskell-tab-indent--cycle ()
-  (let ((previous-line-tabs (haskell-tab-indent--previous-line-tabs))
-        (this-line-tabs (haskell-tab-indent--this-line-tabs)))
-    (if (= (1+ previous-line-tabs) this-line-tabs)
-        (haskell-tab-indent--reset)
-      (haskell-tab-indent--indent))))
-
-(defun haskell-tab-indent--reset ()
-  (save-excursion
-    (back-to-indentation)
-    (delete-region (line-beginning-position) (point))))
-
-(defun haskell-tab-indent--indent ()
-  (save-excursion
-    (back-to-indentation)
-    (insert "\t")))
-
-(defun haskell-tab-indent--previous-line-tabs ()
-  (save-excursion
-    (beginning-of-line 0)               ; go up one line
-    ;; keep going up past blank spacer lines
-    (while (looking-at "[[:space:]]*$") (beginning-of-line 0))
-    (haskell-tab-indent--this-line-tabs)))
-
-(defun haskell-tab-indent--this-line-tabs ()
-  (save-excursion
-    (save-restriction
-      (back-to-indentation)
-      (narrow-to-region (line-beginning-position) (point))
-      (beginning-of-line)
-      (let ((count 0))
-	(while (re-search-forward "\t" nil t)
-	  (setq count (1+ count)))
-	count))))
+(cl-flet*
+    ((count-line-tabs () (save-excursion
+                           (back-to-indentation)
+                           (length (seq-filter (lambda (c) (equal c ?\t))
+                                               (buffer-substring
+                                                (line-beginning-position)
+                                                (point)))))))
+  (defun haskell-tab-indent ()
+    "Auto indentation on TAB for `haskell-tab-indent-mode'."
+    (interactive)
+    (let ((this-line-tabs (count-line-tabs))
+          (prev-line-tabs
+           (save-excursion
+             (cl-loop do    (beginning-of-line 0)
+                      while (looking-at "[[:space:]]*$"))
+             (count-line-tabs)))
+          ;; determine whether previous line is a top-level declaration
+          (prev-line-topdecl
+           (save-excursion
+             (beginning-of-line 0)
+             (eq 'haskell-definition-face
+                 (get-text-property (point) 'face)))))
+      (save-excursion
+        (back-to-indentation)
+        (if (looking-at "where$")
+            (setf (buffer-substring (line-beginning-position) (point)) "  ")
+          ;; check for special case of being called by
+          ;; `newline-and-indent': if the user has `electric-indent-mode'
+          ;; on and RET bound to `newline-and-indent', we'll end up
+          ;; indenting too far, or not enough if the previous line was a
+          ;; top level declaration
+          (unless (or
+                   ;; avoid indenting too far
+                   (and (equal this-command 'newline-and-indent)
+                        (= this-line-tabs prev-line-tabs)
+                        (not prev-line-topdecl))
+                   ;; avoid indenting too little
+                   (and prev-line-topdecl
+                        (= 1 this-line-tabs)))
+            (if (= (1+ prev-line-tabs) this-line-tabs)
+                ;; reset
+                (delete-region (line-beginning-position) (point))
+              ;; indent
+              (insert "\t"))))))
+    ;; on a line with only indentation, ensure point is at the end
+    (when (save-excursion (beginning-of-line) (looking-at "[[:space:]]*$"))
+      (end-of-line))))
 
 ;;;###autoload
 (define-minor-mode haskell-tab-indent-mode

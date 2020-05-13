@@ -7,6 +7,8 @@
 
 - Drop reference to an old git subtrees script from README.md.
 
+- Code cleanup.
+
 0.2 (2019-04-15)
 ----------------
 
