@@ -21,7 +21,7 @@
 - When one of the above cases does not apply, default to indenting to
   the same level of the previous line, unless the user explicitly
   invoked `indent-for-tab-command' (e.g. by hitting the tab key), in
-  which case cycle between possible indents.
+  which case cycle between plausible indents.
 
   This replaces treating the case where the current command is
   `newline-and-indent' specially.
