@@ -83,7 +83,16 @@
         (back-to-indentation)
         (let ((indent (cond
                        ((looking-at "where$")
-                        (concat (tabs prev-line-tabs) "  "))
+                        ;; if user explicitly requested an indent
+                        ;; change, cycle indentation of the where
+                        ;; clause, but no deeper than the level of the
+                        ;; previous line.  Otherwise, just ensure it's
+                        ;; preceded by two spaces
+                        (if (eq this-command 'indent-for-tab-command)
+                            (if (>= this-line-tabs prev-line-tabs)
+                                "  "
+                              (concat (tabs (1+ this-line-tabs)) "  "))
+                          (concat (tabs this-line-tabs) "  ")))
                        ;; if the previous line is a declaration, then
                        ;; this line should be either empty, or at the
                        ;; same indent level as that declaration
