@@ -11,6 +11,12 @@
 - Attempt to line up the first line of definitions with declarations
   on the previous line, rather than indenting further.
 
+- Reset indentation when current indentation is at least one more than
+  the previous line, rather than just when it is exactly one more than
+  the previous line.
+
+  This should make it easier to unindent more than one line.
+
 - Drop reference to an old git subtrees script from README.md.
 
 - Code cleanup.

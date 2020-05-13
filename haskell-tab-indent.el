@@ -105,7 +105,7 @@
                           (not prev-line-decl))
                      ;; avoid indenting too little
                      (and prev-line-decl (= 1 this-line-tabs)))
-              (if (= (1+ prev-line-tabs) this-line-tabs)
+              (if (>= this-line-tabs (1+ prev-line-tabs))
                   ;; reset
                   (delete-region (line-beginning-position) (point))
                 ;; indent
