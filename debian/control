@@ -1,0 +1,20 @@
+Source: emacs-haskell-tab-indent
+Section: editors
+Priority: optional
+Maintainer: Sean Whitton <spwhitton@spwhitton.name>
+Build-Depends: debhelper-compat (= 12),
+ dh-elpa
+Standards-Version: 4.5.0
+Homepage: https://spwhitton.name/tech/code/haskell-tab-indent/
+
+Package: elpa-haskell-tab-indent
+Architecture: all
+Depends: ${elpa:Depends}, ${misc:Depends}
+Recommends: emacs (>= 46.0), elpa-haskell-mode
+Enhances: emacs
+Description: tab-based indentation for haskell-mode
+ This file provides `haskell-tab-indent-mode', a simple indentation
+ mode for Haskell projects which require tabs for indentation and do
+ not permit spaces (except for where clauses, as a special case).
+ .
+ The user may use TAB to cycle between possible indentations.
