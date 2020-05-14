@@ -1,3 +1,9 @@
+emacs-haskell-tab-indent (0.3-2) unstable; urgency=medium
+
+  * Add Vcs-* fields.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Thu, 14 May 2020 07:47:25 -0700
+
 emacs-haskell-tab-indent (0.3-1) unstable; urgency=medium
 
   * Initial release.

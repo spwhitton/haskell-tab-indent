@@ -6,6 +6,8 @@ Build-Depends: debhelper-compat (= 12),
  dh-elpa
 Standards-Version: 4.5.0
 Homepage: https://spwhitton.name/tech/code/haskell-tab-indent/
+Vcs-Git: https://git.spwhitton.name/haskell-tab-indent
+Vcs-Browser: https://git.spwhitton.name/haskell-tab-indent
 
 Package: elpa-haskell-tab-indent
 Architecture: all
