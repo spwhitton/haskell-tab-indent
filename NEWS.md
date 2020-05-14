@@ -1,4 +1,4 @@
-0.3 (unreleased)
+0.3 (2020-05-14)
 ----------------
 
 - When checking for the first line of a where clause, require 'where'
