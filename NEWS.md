@@ -34,6 +34,8 @@
 
 - Drop reference to an old git subtrees script from README.md.
 
+- Add some project administrivia files.
+
 - Code cleanup.
 
 0.2 (2019-04-15)
