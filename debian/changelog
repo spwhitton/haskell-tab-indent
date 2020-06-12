@@ -1,3 +1,9 @@
+emacs-haskell-tab-indent (0.3-3) unstable; urgency=medium
+
+  * Source-only upload to permit testing migration.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Fri, 12 Jun 2020 12:45:34 -0700
+
 emacs-haskell-tab-indent (0.3-2) unstable; urgency=medium
 
   * Add Vcs-* fields.
