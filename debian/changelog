@@ -1,3 +1,9 @@
+emacs-haskell-tab-indent (0.3-4) unstable; urgency=medium
+
+  * Rebuild against newer dh-elpa.
+
+ -- Sean Whitton <spwhitton@spwhitton.name>  Fri, 26 Jul 2024 11:51:52 +0900
+
 emacs-haskell-tab-indent (0.3-3) unstable; urgency=medium
 
   * Source-only upload to permit testing migration.
